@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+    nginx-la2-lk:
+        container_name: nginx-l2anoncer
+        image: nginx:1.24.0
+        restart: "no"
+        ports:
+            - "8081:80"
+        volumes:
+            - .:/var/www/
+            # конфигурация nginx
+            - ./.docker/config/nginx/:/etc/nginx/conf.d/
+            # логи
+            - ./.docker/logs/nginx:/var/log/nginx/
+        networks:
+            - web-network-l2anoncer
+
+    php-la2-lk:
+        build:
+            context: ./.docker/
+        container_name: php-l2anoncer
+        restart: "no"
+        tty: true
+        working_dir: /var/www
+        volumes:
+            - .:/var/www/
+        networks:
+            - web-network-l2anoncer
+
+    mysql-la2-lk:
+        container_name: mysql-l2anoncer
+        image: mariadb:11.1.2
+        restart: "no"
+        ports:
+            - "${DB_PORT}:3306"
+        volumes:
+            - ./logs/mysql/:/var/logs/mysql
+            - db-mysql:/var/lib/mysql
+        security_opt:
+            - seccomp:unconfined
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        networks:
+            - web-network-l2anoncer
+
+volumes:
+    db-mysql:
+
+networks:
+    web-network-l2anoncer:
+        driver: bridge
