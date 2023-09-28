@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IndexController;
 use App\Http\Controllers\Servers\ServerController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', [IndexController::class, 'show']);
 Route::get('servers/add-server', [ServerController::class, 'show']);
 Route::post('servers/add-server', [ServerController::class, 'create'])->name('server.create');
 
