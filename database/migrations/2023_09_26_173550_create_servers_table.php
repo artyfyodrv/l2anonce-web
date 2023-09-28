@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('servers', function (Blueprint $table) {
             $table->id();
-            $table->string('status');
+            $table->string('status')->default('considerate');
             $table->string('host')->nullable(false);
             $table->string('chronicles')->nullable(false);
             $table->string('rates')->nullable(false);

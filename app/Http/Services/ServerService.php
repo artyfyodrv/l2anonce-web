@@ -13,18 +13,6 @@ use Illuminate\Support\Facades\Log;
  */
 class ServerService
 {
-    /** Получение списка серверов */
-    public function getAll()
-    {
-        try {
-            $data = Server::all();
-        } catch (Exception $e) {
-            Log::error($e->getMessage() . ' ' . __FILE__ . ':' . __LINE__);
-            throw new Exception('Ошибка получения данных');
-        }
-
-        return $data;
-    }
 
     public function getOne($id)
     {
@@ -43,7 +31,6 @@ class ServerService
     {
         try {
             $server = Server::firstOrCreate([
-                'status' => $data->status ?? "considerate",
                 'host' => $data->host,
                 'chronicles' => $data->chronicles,
                 'rates' => $data->rates,

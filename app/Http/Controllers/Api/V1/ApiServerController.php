@@ -13,38 +13,20 @@ use Illuminate\Http\JsonResponse;
  */
 class ApiServerController extends Controller
 {
-    public function getList(): JsonResponse
-    {
-        try {
-            $apiService = new ServerService();
-            $data = $apiService->getAll();
-        } catch (Exception $e){
-            return response()->json([
-                'status' => 'failed',
-                'message' => $e->getMessage()
-            ]);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $data
-        ]);
-    }
-
     public function getOne($id): JsonResponse
     {
         try {
-            $serverApi = new ServerService();
-            $data = $serverApi->getOne($id);
+            $serverService = new ServerService();
+            $data = $serverService->getOne($id);
         } catch (Exception $e) {
             return response()->json([
-                'status' => 'failed',
+                'success' => false,
                 'message' => $e->getMessage()
             ]);
         }
 
         return response()->json([
-            'status' => 'success',
+            'success' => true,
             'data' => $data
         ]);
     }
@@ -52,17 +34,17 @@ class ApiServerController extends Controller
     public function create(AddServerValidation $validation): JsonResponse
     {
         try {
-            $serverApi = new ServerService();
-            $data = $serverApi->create($validation);
+            $serverService = new ServerService();
+            $data = $serverService->create($validation);
         } catch (Exception $e) {
             return response()->json([
-                'status' => 'failed',
+                'success' => false,
                 'message' => $e->getMessage()
             ]);
         }
 
         return response()->json([
-            'status' => 'success',
+            'success' => true,
             'message' => 'Сервер успешно добавлен',
             'data' => $data
         ]);
