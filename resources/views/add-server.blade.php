@@ -48,6 +48,8 @@
     @enderror
     <br>
 
+    {{ session('add-success') }}
+
     <button type="submit">Отправить</button>
 </form>
 </body>

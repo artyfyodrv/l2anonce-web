@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 class ServerService
 {
 
-    public function getOne($id)
+    public static function getOne($id)
     {
         try {
             $data = Server::find($id);
@@ -45,9 +45,21 @@ class ServerService
     }
 
     /** Редактирование сервера */
-    public function edit()
+    public static function edit($data)
     {
-        // TODO: Реализовать метод
+        try {
+            $server = Server::find($data['id']);
+            $server->status = $data['status'];
+            $server->host = $data['host'];
+            $server->chronicles = $data['chronicles'];
+            $server->rates = $data['rates'];
+            $server->open_date = $data['open_date'];
+            $server->save();
+        } catch (Exception $e) {
+           return throw new Exception('Возникла ошибка при внесении изменений');
+        }
+
+        return $server;
     }
 
 }

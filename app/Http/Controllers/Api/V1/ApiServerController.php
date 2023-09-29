@@ -16,8 +16,7 @@ class ApiServerController extends Controller
     public function getOne($id): JsonResponse
     {
         try {
-            $serverService = new ServerService();
-            $data = $serverService->getOne($id);
+            $data = ServerService::getOne($id);
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,

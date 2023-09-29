@@ -16,7 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [IndexController::class, 'show']);
-Route::get('servers/add-server', [ServerController::class, 'show']);
-Route::post('servers/add-server', [ServerController::class, 'create'])->name('server.create');
+Route::get('servers/add', [ServerController::class, 'show']);
+Route::post('servers/add', [ServerController::class, 'create'])->name('server.create');
+
+Route::get('servers/{id}/edit', [ServerController::class, 'showEditForm']);
+Route::patch('servers/edit/{id}/submit', [ServerController::class, 'edit'])->name('server.edit');
 
 

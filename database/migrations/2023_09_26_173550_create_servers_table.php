@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('chronicles')->nullable(false);
             $table->string('rates')->nullable(false);
             $table->date('open_date');
+            $table->boolean('is_visible')->default(false);
+            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }
