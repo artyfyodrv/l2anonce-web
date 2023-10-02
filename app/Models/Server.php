@@ -15,5 +15,7 @@ class Server extends Model
         'chronicles',
         'rates',
         'open_date',
+        'is_visible',
+        'is_deleted',
     ];
 }

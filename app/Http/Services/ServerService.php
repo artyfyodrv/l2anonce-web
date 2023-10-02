@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Log;
  */
 class ServerService
 {
-
     public static function getOne($id)
     {
         try {
@@ -48,14 +47,12 @@ class ServerService
     public static function edit($data)
     {
         try {
-            $server = Server::find($data['id']);
-            $server->status = $data['status'];
-            $server->host = $data['host'];
-            $server->chronicles = $data['chronicles'];
-            $server->rates = $data['rates'];
-            $server->open_date = $data['open_date'];
+
+            $server = Server::query()->find($data['id']);
+            $server->fill($data->validated());
             $server->save();
         } catch (Exception $e) {
+            Log::error($e->getMessage() . ' ' . __FILE__ . ':' . __LINE__);
            return throw new Exception('Возникла ошибка при внесении изменений');
         }
 

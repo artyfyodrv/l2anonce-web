@@ -17,5 +17,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('v1/servers/add', [ApiServerController::class, 'create']);
 Route::get('v1/servers/get/{id}', [ApiServerController::class, 'getOne']);
-Route::get('v1/servers/edit/{id}', [ApiServerController::class, 'edit']);
+Route::post('v1/servers/edit/{id}', [ApiServerController::class, 'edit']);
 
