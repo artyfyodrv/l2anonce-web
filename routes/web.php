@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\Servers\ServerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,4 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [\App\Http\Controllers\IndexController::class, 'show']);
+Route::get('/', [IndexController::class, 'show']);
+Route::get('servers/add', [ServerController::class, 'show']);
+Route::post('servers/add', [ServerController::class, 'create'])->name('server.create');
+
+Route::get('servers/{id}/edit', [ServerController::class, 'showEditForm']);
+Route::patch('servers/edit/{id}/submit', [ServerController::class, 'edit'])->name('server.edit');
+
+
