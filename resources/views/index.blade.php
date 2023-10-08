@@ -12,6 +12,7 @@
     <title>L2Rates - рейтинг серверов Lineage II</title>
 </head>
 <body>
+
 <div class="grid">
     <header>
         <div class="server_banner">
@@ -54,65 +55,88 @@
                 <div class="left-containers">
                     <a class='page soon_open'>Скоро открываются</a>
                     <div class="soon_open_servers">
+                        @foreach ($serversList['soonOpen'] as $soon)
                             <ul class="get_server">
                                 <li class="server status_server" href="">TOP</li>
-                                <li class="server name_server" href=""></li>
+                                <li class="server name_server" href="">{{ $soon->host }}</li>
                                 <li class="server icons_server" href=""></li>
-                                <li class="server rates_server" href=""></li>
-                                <li class="server chronicle_server" href=""></li>
-                                <li class="server date_server"></li>
+                                <li class="server rates_server" href="">{{ $soon->rates }}</li>
+                                <li class="server chronicle_server" href="">{{ $soon->chronicles }}</li>
+                                <li class="server date_server">{{ Carbon\Carbon::parse($soon->open_date)->format('Y-m-d') }}</li>
                             </ul>
+                        @endforeach
                     </div>
+{{--                    <?php dd($serversList)?>--}}
                     <div class="yesterday_servers">
                         <a class='page today_open'>Открываются сегодня</a>
                         <div class="soon_open_servers">
+                            @foreach ($serversList['todayOpen'] as $today)
                                 <ul class="get_server">
                                     <li class="server status_server" href="">TOP</li>
-                                    <li class="server name_server" href=""></li>
+                                    <li class="server name_server" href="">{{ $today->host }}</li>
                                     <li class="server icons_server" href=""></li>
-                                    <li class="server rates_server" href=""></li>
-                                    <li class="server chronicle_server" href=""></li>
-                                    <li class="server date_server" href=""></li>
+                                    <li class="server rates_server" href="">{{ $today->rates }}</li>
+                                    <li class="server chronicle_server" href="">{{ $today->chronicles }}</li>
+                                    <li class="server date_server"
+                                        href="">
+                                        {{ Carbon\Carbon::parse($today->open_date)->format('Y-m-d') }}
+                                    </li>
                                 </ul>
+                            @endforeach
                         </div>
                     </div>
                     <div class="tomorrow_servers">
                         <a class='page today_open'>Открываются завтра</a>
                         <div class="soon_open_servers">
+                            @foreach ($serversList['tomorrowOpen'] as $tomorrow)
                                 <ul class="get_server">
                                     <li class="server status_server" href="">TOP</li>
-                                    <li class="server name_server" href=""></li>
+                                    <li class="server name_server" href="">{{ $tomorrow->host }}</li>
                                     <li class="server icons_server" href=""></li>
-                                    <li class="server rates_server" href=""></li>
-                                    <li class="server chronicle_server" href=""></li>
-                                    <li class="server date_server" href=""></li>
+                                    <li class="server rates_server" href="">{{ $tomorrow->rates }}</li>
+                                    <li class="server chronicle_server" href="">{{ $tomorrow->chronicles }}</li>
+                                    <li class="server date_server"
+                                        href="">
+                                        {{ Carbon\Carbon::parse($tomorrow->open_date)->format('Y-m-d') }}
+                                    </li>
                                 </ul>
+                            @endforeach
                         </div>
                     </div>
                     <div class="opens_7day_servers">
                         <a class='page today_open'>Ближайшую неделю</a>
                         <div class="soon_open_servers">
+                            @foreach ($serversList['weekOpen'] as $week)
                                 <ul class="get_server">
                                     <li class="server status_server" href="">TOP</li>
-                                    <li class="server name_server" href=""></li>
+                                    <li class="server name_server" href="">{{ $week->host }}</li>
                                     <li class="server icons_server" href=""></li>
-                                    <li class="server rates_server" href=""></li>
-                                    <li class="server chronicle_server" href=""></li>
-                                    <li class="server date_server" href=""></li>
+                                    <li class="server rates_server" href="">{{ $week->rates }}</li>
+                                    <li class="server chronicle_server" href="">{{ $week->chronicles }}</li>
+                                    <li class="server date_server"
+                                        href="">
+                                        {{ Carbon\Carbon::parse($week->open_date)->format('Y-m-d') }}
+                                    </li>
                                 </ul>
+                            @endforeach
                         </div>
                     </div>
                     <div class="tomorrow_servers">
                         <a class='page today_open'>Более недели</a>
                         <div class="soon_open_servers">
+                            @foreach ($serversList['weekPlusOpen'] as $weekPlus)
                                 <ul class="get_server">
                                     <li class="server status_server" href="">TOP</li>
-                                    <li class="server name_server" href=""></li>
+                                    <li class="server name_server" href="">{{ $weekPlus->host }}</li>
                                     <li class="server icons_server" href=""></li>
-                                    <li class="server rates_server" href=""></li>
-                                    <li class="server chronicle_server" href=""></li>
-                                    <li class="server date_server" href=""></li>
+                                    <li class="server rates_server" href="">{{ $weekPlus->rates }}</li>
+                                    <li class="server chronicle_server" href="">{{ $weekPlus->chronicles }}</li>
+                                    <li class="server date_server"
+                                        href="">
+                                        {{ Carbon\Carbon::parse($weekPlus->open_date)->format('Y-m-d') }}
+                                    </li>
                                 </ul>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -120,41 +144,67 @@
                     <div class="opened_servers">
                         <a class='page today_open'>Открытые сервера</a>
                         <div class="soon_open_servers">
+                            @foreach ($serversList['alreadyOpen'] as $open)
                                 <ul class="get_server">
                                     <li class="server status_server" href="">TOP</li>
-                                    <li class="server name_server" href=""></li>
+                                    <li class="server name_server" href="">{{ $open->host }}</li>
                                     <li class="server icons_server" href=""></li>
-                                    <li class="server rates_server" href=""></li>
-                                    <li class="server chronicle_server" href=""></li>
-                                    <li class="server date_server" href=""></li>
+                                    <li class="server rates_server" href="">{{ $open->rates }}</li>
+                                    <li class="server chronicle_server" href="">{{ $open->chronicles }}</li>
+                                    <li class="server date_server"
+                                        href="">
+                                        {{ Carbon\Carbon::parse($open->open_date)->format('Y-m-d') }}
+                                    </li>
                                 </ul>
+                            @endforeach
                         </div>
                         <div class="last_7day_servers">
                             <a class='page today_open'>Открылись вчера</a>
+                            @foreach ($serversList['yesterdayOpen'] as $yesterday)
                                 <ul class="get_server">
                                     <li class="server status_server" href="">TOP</li>
-                                    <li class="server name_server" href=""></li>
+                                    <li class="server name_server" href="">{{ $yesterday->host }}</li>
                                     <li class="server icons_server" href=""></li>
-                                    <li class="server rates_server" href=""></li>
-                                    <li class="server chronicle_server" href=""></li>
+                                    <li class="server rates_server" href="">{{ $yesterday->rates }}</li>
+                                    <li class="server chronicle_server" href="">{{ $yesterday->chronicles }}</li>
                                     <li class="server date_server"
-                                        href=""></li>
+                                        href="">
+                                        {{ Carbon\Carbon::parse($yesterday->open_date)->format('Y-m-d') }}
+                                    </li>
                                 </ul>
+                            @endforeach
                         </div>
                         <div class="last_7day_servers">
                             <a class='page today_open'>Предыдущую неделю</a>
+                            @foreach ($serversList['lastWeekOpen'] as $lastWeek)
                                 <ul class="get_server">
                                     <li class="server status_server" href="">TOP</li>
-                                    <li class="server name_server" href=""></li>
+                                    <li class="server name_server" href="">{{ $lastWeek->host }}</li>
                                     <li class="server icons_server" href=""></li>
-                                    <li class="server rates_server" href=""></li>
-                                    <li class="server chronicle_server" href=""></li>
+                                    <li class="server rates_server" href="">{{ $lastWeek->rates }}</li>
+                                    <li class="server chronicle_server" href="">{{ $lastWeek->chronicles }}</li>
                                     <li class="server date_server"
-                                        href=""></li>
+                                        href="">
+                                        {{ Carbon\Carbon::parse($lastWeek->open_date)->format('Y-m-d') }}
+                                    </li>
                                 </ul>
+                            @endforeach
                         </div>
                         <div class="opened_7plus_servers">
                             <a class='page today_open'>Более недели назад</a>
+                            @foreach ($serversList['lastWeekPlusOpen'] as $lastWeekPlus)
+                                <ul class="get_server">
+                                    <li class="server status_server" href="">TOP</li>
+                                    <li class="server name_server" href="">{{ $lastWeekPlus->host }}</li>
+                                    <li class="server icons_server" href=""></li>
+                                    <li class="server rates_server" href="">{{ $lastWeekPlus->rates }}</li>
+                                    <li class="server chronicle_server" href="">{{ $lastWeekPlus->chronicles }}</li>
+                                    <li class="server date_server"
+                                        href="">
+                                        {{ Carbon\Carbon::parse($lastWeekPlus->open_date)->format('Y-m-d') }}
+                                    </li>
+                                </ul>
+                            @endforeach
                         </div>
                     </div>
                 </div>
