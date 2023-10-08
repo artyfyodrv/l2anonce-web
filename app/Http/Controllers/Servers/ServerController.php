@@ -10,6 +10,8 @@ use App\Http\Requests\EditServerValidation;
 use App\Http\Services\ServerService;
 use App\Models\Server;
 use Exception;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 /**
  * Контроллер для работы с серверами через Views
@@ -21,13 +23,20 @@ class ServerController extends Controller
         return view('add-server');
     }
 
-    public function create(AddServerValidation $validation)
+    public function create(AddServerValidation $request)
     {
         try {
-            $serverService = new ServerService();
-            $serverService->create($validation);
-        } catch (Exception $e) {
-            return redirect()->back()->withInput()->withErrors(['add-error' => $e->getMessage()]);
+            $validateData = $request->validated();
+            Server::query()->firstOrCreate([
+                'host' => $validateData['host'],
+                'chronicles' => $validateData['chronicles'],
+                'rates' => $validateData['rates'],
+                'open_date' => $validateData['open_date']
+            ]);
+        } catch (Throwable $t) {
+            Log::error($t->getMessage() . ' ' . __FILE__ . ' ' . __LINE__);
+            return redirect()->back()->withInput()->withErrors([
+                'add-error' => 'Ошибка при отправке, обратитесь в тех.поддержку']);
         }
 
         return redirect()->back()->with(['add-success' => 'Успешное добавление']);
@@ -36,17 +45,25 @@ class ServerController extends Controller
     // TODO:: Перенести реализацию в Админ панель
     public function showEditForm($id)
     {
-        $data = Server::find($id);
+        try {
+            $data = Server::find($id);
+        } catch (Throwable $t) {
+            Log::error($t->getMessage() . ' ' . __FILE__ . ' ' . __LINE__);
+            return redirect()->back()->withInput()->withErrors(['edit-error' => 'Неизвестная ошибка']);
+        }
         return view('edit-server', compact('id', 'data'));
     }
 
     // TODO:: Перенести реализацию в Админ панель
-    public function edit(EditServerValidation $validation)
+    public function edit(EditServerValidation $request)
     {
         try {
-            ServerService::edit($validation);
-        } catch (Exception $e) {
-            return redirect()->back()->withInput()->withErrors(['edit-error' => $e->getMessage()]);
+            $server = Server::query()->find((int)$request->id);
+            $server->fill($request->validated());
+            $server->save();
+        } catch (Throwable $t) {
+            Log::error($t->getMessage() . ' ' . __FILE__ . ' ' . __LINE__);
+            return redirect()->back()->withInput()->withErrors(['edit-error' => 'Ошибка изменения сервера']);
         }
 
         return redirect()->back()->with(['edit-success' => 'Успешное добавение']);

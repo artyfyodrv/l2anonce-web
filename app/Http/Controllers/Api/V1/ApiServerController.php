@@ -2,74 +2,65 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\ResponseController;
 use App\Http\Requests\AddServerValidation;
 use App\Http\Requests\EditServerValidation;
-use App\Http\Services\ServerService;
-use Exception;
+use App\Models\Server;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response as HttpCode;
+use Throwable;
 
 /**
  * Контроллер для работы с серверами через API V1
  */
-class ApiServerController extends Controller
+class ApiServerController extends ResponseController
 {
     public function getOne($id): JsonResponse
     {
         try {
-            $data = ServerService::getOne($id);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
+            $data = Server::query()->find($id);
+        } catch (Throwable $t) {
+            Log::error($t->getMessage() . ' ' . __FILE__ . ' ' . __LINE__);
+            return $this->sendError('Ошибка при получении сервера', HttpCode::HTTP_BAD_REQUEST);
         }
 
-        return response()->json([
-            'success' => true,
-            'data' => $data
-        ]);
+        return $this->sendResponse($data);
     }
 
-    public function create(AddServerValidation $validation): JsonResponse
+    public function create(AddServerValidation $request): JsonResponse
     {
         try {
-            $serverService = new ServerService();
-            $data = $serverService->create($validation);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'action' => 'create',
-                'message' => $e->getMessage()
+            $validateData = $request->validated();
+
+            $data = Server::query()->firstOrCreate([
+                'host' => $validateData['host'],
+                'chronicles' => $validateData['chronicles'],
+                'rates' => $validateData['rates'],
+                'open_date' => $validateData['open_date']
             ]);
+
+        } catch (Throwable $t) {
+            Log::error($t->getMessage() . ' ' . __FILE__ . ' ' . __LINE__);
+            return $this->sendError('Ошибка добавления сервера', HttpCode::HTTP_BAD_REQUEST);
         }
 
-        return response()->json([
-            'success' => true,
-            'action' => 'create',
-            'message' => 'Сервер успешно добавлен',
-            'data' => $data
-        ]);
+        return $this->sendResponse($data);
     }
 
     // TODO:: Перенести реализацию в Админ панель
-    public function edit(EditServerValidation $validation)
+    public function edit(EditServerValidation $request)
     {
         try {
-            $serverService = ServerService::edit($validation);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'action' => 'update',
-                'message' => $e->getMessage()
-            ]);
+            $server = Server::query()->find((int)$request->id);
+            $server->fill($request->validated());
+            $server->save();
+        } catch (Throwable $t) {
+            Log::error($t->getMessage() . ' ' . __FILE__ . ':' . __LINE__);
+            return $this->sendError('Ошибка при изменении сервера', HttpCode::HTTP_BAD_REQUEST);
         }
 
-        return response()->json([
-            'success' => true,
-            'action' => 'update',
-            'data' => $serverService
-        ]);
+        return $this->sendResponse($server);
     }
 
 }
